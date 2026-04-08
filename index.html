@@ -1660,44 +1660,14 @@
         flex-direction: column;
         align-items: flex-start;
       }
-      /* ==========================================================================
-        GAMES HEADER — ИСПРАВЛЕННАЯ РАСКЛАДКА
-        ========================================================================== */
-      .games-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        margin-bottom: 2rem;
-        gap: 1rem;
-        flex-wrap: wrap;
-      }
-
-      .games-header h2 {
-        margin: 0;
-        flex-shrink: 0;           /* заголовок никогда не сжимается */
-      }
-
-      .games-header p {
-        margin: 0;
-        color: var(--color-text-muted);
-        font-family: var(--font-mono);
-        font-size: 0.95rem;
-        line-height: 1.4;
-        max-width: 420px;
-      }
-
-      /* На мобильных — текст всегда под заголовком, без налезания */
-      @media (max-width: 768px) {
-        .games-header {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 0.6rem;
-        }
-        
-        .games-header p {
-          font-size: 0.9rem;
-        }
-      }
+    }
+    @media (max-width: 768px) {
+  #games .reveal,
+  #games .games-grid {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+}
   </style>
 </head>
 <body>
@@ -1820,12 +1790,12 @@
           <div class="zone-content">
             <h3 class="zone-title" style="color: var(--color-accent-warm);">VIP ПАКЕТ</h3>
             <ul class="zone-specs">
-              <li><span class="spec-icon">🔳</span><span class="spec-value">Процессор: Ryzen 5 5600</span></li>
-              <li><span class="spec-icon">🎮</span><span class="spec-value">Видеокарта: NVIDIA RTX 3060 Ti</span></li>
-              <li><span class="spec-icon">📺</span><span class="spec-value">Монитор: LG/AOC 27" 240 Гц</span></li>
-              <li><span class="spec-icon">🖱️</span><span class="spec-value">Мышь: Logitech G403 Hero</span></li>
-              <li><span class="spec-icon">⌨️</span><span class="spec-value">Клавиатура: A4Tech B810R</span></li>
-              <li><span class="spec-icon">🎧</span><span class="spec-value">Наушники: Ardor Gaming Edge</span></li>
+              <li><span class="spec-icon"></span><span class="spec-value">Процессор: Ryzen 5 5600</span></li>
+              <li><span class="spec-icon"></span><span class="spec-value">Видеокарта: NVIDIA RTX 3060 Ti</span></li>
+              <li><span class="spec-icon"></span><span class="spec-value">Монитор: LG/AOC 27" 240 Гц</span></li>
+              <li><span class="spec-icon"></span><span class="spec-value">Мышь: Logitech G403 Hero</span></li>
+              <li><span class="spec-icon"></span><span class="spec-value">Клавиатура: A4Tech B810R</span></li>
+              <li><span class="spec-icon"></span><span class="spec-value">Наушники: Ardor Gaming Edge</span></li>
             </ul>
             <a href="#booking" class="btn btn-primary" style="width: 100%;">ЗАБРОНИРОВАТЬ</a>
           </div>
@@ -1839,12 +1809,12 @@
           <div class="zone-content">
             <h3 class="zone-title">STANDART ПАКЕТ</h3>
             <ul class="zone-specs">
-              <li><span class="spec-icon">🔳</span><span class="spec-value">Процессор: Ryzen 5 5500</span></li>
-              <li><span class="spec-icon">🎮</span><span class="spec-value">Видеокарта: NVIDIA RTX 2060</span></li>
-              <li><span class="spec-icon">📺</span><span class="spec-value">Монитор: AOC 24" 144 Гц</span></li>
-              <li><span class="spec-icon">🖱️</span><span class="spec-value">Мышь: Logitech G102</span></li>
-              <li><span class="spec-icon">⌨️</span><span class="spec-value">Клавиатура: Sven KB-G9700</span></li>
-              <li><span class="spec-icon">🎧</span><span class="spec-value">Наушники: Razer BlackShark V2 X</span></li>
+              <li><span class="spec-icon"></span><span class="spec-value">Процессор: Ryzen 5 5500</span></li>
+              <li><span class="spec-icon"></span><span class="spec-value">Видеокарта: NVIDIA RTX 2060</span></li>
+              <li><span class="spec-icon"></span><span class="spec-value">Монитор: AOC 24" 144 Гц</span></li>
+              <li><span class="spec-icon"></span><span class="spec-value">Мышь: Logitech G102</span></li>
+              <li><span class="spec-icon"></span><span class="spec-value">Клавиатура: Sven KB-G9700</span></li>
+              <li><span class="spec-icon"></span><span class="spec-value">Наушники: Razer BlackShark V2 X</span></li>
             </ul>
             <a href="#booking" class="btn btn-outline" style="width: 100%;">ЗАБРОНИРОВАТЬ</a>
           </div>
@@ -1931,28 +1901,24 @@
       
       <div class="promo-grid reveal" style="margin-bottom: 4rem;">
         <div class="promo-card">
-          <div class="promo-icon-wrap">🕘</div>
           <div class="promo-info">
             <h3>БОНУСНЫЙ ЧАС</h3>
             <p>Получите дополнительный час к купленному времени с 9:00 до 13:00. Отличный способ продлить игровой сеанс!</p>
           </div>
         </div>
         <div class="promo-card">
-          <div class="promo-icon-wrap">🤝</div>
           <div class="promo-info">
             <h3>ПРИВЕДИ ДРУГА</h3>
             <p>Пригласите друга — и каждый из вас получит по 1 часу на баланс. Отличный повод собраться вместе!</p>
           </div>
         </div>
         <div class="promo-card">
-          <div class="promo-icon-wrap">⭐</div>
           <div class="promo-info">
             <h3>БОНУС ЗА ОТЗЫВ</h3>
             <p>Оставьте отзыв в Яндекс Картах, 2ГИС или ВКонтакте — получите приятный бонус на игровой счёт.</p>
           </div>
         </div>
         <div class="promo-card">
-          <div class="promo-icon-wrap">🎂</div>
           <div class="promo-info">
             <h3>2 ЧАСА В ДЕНЬ РОЖДЕНИЯ</h3>
             <p>Отпразднуйте день рождения с CYBER KING! Дарим 2 часа игры за 2 дня до и после даты рождения.</p>
@@ -1963,14 +1929,14 @@
       <div class="reveal" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 3rem;">
         <div class="offer-box" style="border-color: var(--color-accent-secondary); justify-content: space-between;">
           <div>
-            <div class="offer-title" style="font-size: 1.3rem;">🎁 5 ПАКЕТОВ «5 ЧАСОВ»</div>
+            <div class="offer-title" style="font-size: 1.3rem;"> 5 ПАКЕТОВ «5 ЧАСОВ»</div>
             <div class="offer-time">Купи 5 пакетов — 6-й бесплатно!</div>
           </div>
           <div class="offer-price">АКЦИЯ</div>
         </div>
         <div class="offer-box" style="border-color: var(--color-accent-warm); justify-content: space-between;">
           <div>
-            <div class="offer-title" style="font-size: 1.3rem;">🎰 ЛОТОТРОН</div>
+            <div class="offer-title" style="font-size: 1.3rem;"> ЛОТОТРОН</div>
             <div class="offer-time">Пополни баланс от 500 ₽ — выиграй до 5000 ₽</div>
           </div>
           <div class="offer-price">ДЖЕКПОТ</div>
@@ -1986,7 +1952,7 @@
             <li>Энергетик Adrenaline</li>
             <li>Батончик Snickers</li>
           </ul>
-          <div class="combo-price">⚡ зарядись</div>
+          <div class="combo-price">зарядись</div>
         </div>
         <div class="combo-card">
           <h4 class="combo-name">РАШ Б</h4>
@@ -1994,10 +1960,10 @@
             <li>Сэндвич</li>
             <li>Lit Energy Zero Sugar (без сахара)</li>
           </ul>
-          <div class="combo-price">⚡ без сахара</div>
+          <div class="combo-price">без сахара</div>
         </div>
       </div>
-      <p style="text-align: center; margin-top: 2rem; font-family: var(--font-mono); color: var(--color-accent-tertiary);">Выбирайте своё комбо и заряжайтесь энергией для игровых баталий! 🎮⚡</p>
+      <p style="text-align: center; margin-top: 2rem; font-family: var(--font-mono); color: var(--color-accent-tertiary);">Выбирайте своё комбо и заряжайтесь энергией для игровых баталий!</p>
     </div>
     <div class="section-border"></div>
   </section>
