@@ -2270,15 +2270,13 @@
 
       // ---------- МАТРИЧНЫЙ ФОН ----------
       const canvas = document.getElementById('matrix-canvas');
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext('2d', { alpha: true });
       let width, height, columns, drops;
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレゲゼデベペオォコソトノホモヨョロゴゾドボポヴッン'.split('');
       const fontSize = 14;
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレゲゼデベペオォコソトノホモヨョロゴゾドボポヴッン'.split('');
 
-      let animationFrame = null;
-      let lastTimestamp = 0;
-      const FPS = 30;
-      const frameInterval = 1000 / FPS;
+      let lastTime = 0;
+      const FRAME_INTERVAL = 33; // ← оригинальная скорость (33ms ≈ 30fps)
 
       function initMatrix() {
         width = window.innerWidth;
@@ -2289,98 +2287,51 @@
         drops = Array(columns).fill(1);
       }
 
-      function drawMatrix(timestamp) {
-        // Контроль FPS для производительности на мобильных
-        if (timestamp - lastTimestamp >= frameInterval) {
-          lastTimestamp = timestamp;
+      function drawMatrix() {
+        ctx.fillStyle = 'rgba(3, 3, 5, 0.07)';   // чуть мягче, чем было
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.font = `${fontSize}px "Share Tech Mono", monospace`;
+
+        for (let i = 0; i < drops.length; i++) {
+          const text = chars[Math.floor(Math.random() * chars.length)];
+          ctx.fillStyle = Math.random() > 0.95 
+            ? '#ffffff' 
+            : `rgb(0, ${150 + Math.floor(Math.random() * 105)}, 0)`;
           
-          ctx.fillStyle = 'rgba(3, 3, 5, 0.05)';
-          ctx.fillRect(0, 0, width, height);
-          ctx.font = `${fontSize}px "Share Tech Mono", monospace`;
-          
-          for (let i = 0; i < drops.length; i++) {
-            const text = chars[Math.floor(Math.random() * chars.length)];
-            ctx.fillStyle = Math.random() > 0.95 ? '#ffffff' : `rgb(0, ${150 + Math.floor(Math.random() * 105)}, 0)`;
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-            
-            if (drops[i] * fontSize > height && Math.random() > 0.975) {
-              drops[i] = 0;
-            }
-            drops[i]++;
+          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+          if (drops[i] * fontSize > height && Math.random() > 0.975) {
+            drops[i] = 0;
           }
+          drops[i]++;
         }
-        
-        animationFrame = requestAnimationFrame(drawMatrix);
       }
 
-      // Запуск с обработкой видимости страницы
-      function startMatrix() {
-        if (animationFrame) {
-          cancelAnimationFrame(animationFrame);
+      function loop(timestamp) {
+        if (!lastTime) lastTime = timestamp;
+        const elapsed = timestamp - lastTime;
+
+        if (elapsed >= FRAME_INTERVAL) {
+          drawMatrix();
+          lastTime = timestamp;
         }
-        initMatrix();
-        lastTimestamp = performance.now();
-        animationFrame = requestAnimationFrame(drawMatrix);
+
+        requestAnimationFrame(loop);
       }
-
-      // Обработчик видимости страницы (важно для iOS)
-      document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-          // Останавливаем анимацию когда вкладка неактивна
-          if (animationFrame) {
-            cancelAnimationFrame(animationFrame);
-            animationFrame = null;
-          }
-        } else {
-          // Возобновляем когда вкладка снова активна
-          startMatrix();
-        }
-      });
-
-      // Обработчик скролла с debounce для iOS
-      let scrollTimeout;
-      window.addEventListener('scroll', () => {
-        if (!animationFrame) {
-          startMatrix();
-        }
-        
-        // Сбрасываем таймер при каждом скролле
-        clearTimeout(scrollTimeout);
-        
-        // Через 150ms после окончания скролла гарантируем что анимация работает
-        scrollTimeout = setTimeout(() => {
-          if (!animationFrame) {
-            startMatrix();
-          }
-        }, 150);
-      }, { passive: true });
-
-      // Touch события специально для iOS
-      window.addEventListener('touchstart', () => {
-        if (!animationFrame) {
-          startMatrix();
-        }
-      }, { passive: true });
-
-      window.addEventListener('touchend', () => {
-        setTimeout(() => {
-          if (!animationFrame) {
-            startMatrix();
-          }
-        }, 100);
-      }, { passive: true });
-
-      // Ресайз с debounce
-      let resizeTimeout;
-      window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-          startMatrix();
-        }, 100);
-      });
 
       // Инициализация
-      startMatrix();
+      initMatrix();
+      requestAnimationFrame(loop);
+
+      // Защита от постоянного ресайза на iOS (Address Bar)
+      let prevWidth = window.innerWidth;
+      window.addEventListener('resize', () => {
+        if (Math.abs(window.innerWidth - prevWidth) > 15) {   // только если ширина реально изменилась
+          initMatrix();
+          prevWidth = window.innerWidth;
+        }
+      });
 
       // ---------- HEADER SCROLL ----------
       const header = document.getElementById('header');
