@@ -1660,7 +1660,44 @@
         flex-direction: column;
         align-items: flex-start;
       }
-    }
+      /* ==========================================================================
+        GAMES HEADER — ИСПРАВЛЕННАЯ РАСКЛАДКА
+        ========================================================================== */
+      .games-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 2rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .games-header h2 {
+        margin: 0;
+        flex-shrink: 0;           /* заголовок никогда не сжимается */
+      }
+
+      .games-header p {
+        margin: 0;
+        color: var(--color-text-muted);
+        font-family: var(--font-mono);
+        font-size: 0.95rem;
+        line-height: 1.4;
+        max-width: 420px;
+      }
+
+      /* На мобильных — текст всегда под заголовком, без налезания */
+      @media (max-width: 768px) {
+        .games-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.6rem;
+        }
+        
+        .games-header p {
+          font-size: 0.9rem;
+        }
+      }
   </style>
 </head>
 <body>
@@ -1968,9 +2005,9 @@
   <!-- GAMES LIBRARY -->
   <section id="games">
     <div class="container">
-      <div class="reveal" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-        <h2 style="margin: 0;">БИБЛИОТЕКА ИГР</h2>
-        <p style="color: var(--color-text-muted); font-family: var(--font-mono); margin: 0;">Более 20+ предустановленных игр. SSD M.2 во всех ПК.</p>
+      <div class="games-header reveal">
+        <h2>БИБЛИОТЕКА ИГР</h2>
+        <p>Более 20+ предустановленных игр. SSD M.2 во всех ПК.</p>
       </div>
 
       <div class="games-filters reveal" id="gameFilters">
@@ -2345,32 +2382,105 @@
       ];
 
       const gamesGrid = document.getElementById('gamesGrid');
-      const filterBtns = document.querySelectorAll('.filter-btn');
-      const loadMoreBtn = document.getElementById('loadMoreGames');
-      let displayLimit = 12;
-      let currentFilter = 'all';
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const loadMoreBtn = document.getElementById('loadMoreGames');
+  let displayLimit = 12;
+  let currentFilter = 'all';
 
-      function renderGames() {
-        gamesGrid.innerHTML = '';
-        const filtered = currentFilter === 'all' ? gamesDB : gamesDB.filter(g => g.genre === currentFilter);
-        const toDisplay = filtered.slice(0, displayLimit);
-        const genreLabels = { 'esports': 'Киберспорт', 'shooter': 'Шутер', 'rpg': 'RPG / Action', 'coop': 'Co-op / Multiplayer' };
-        
-        toDisplay.forEach(game => {
-          const card = document.createElement('div');
-          card.className = 'game-card';
-          card.innerHTML = `
-            <img src="${game.img}" alt="${game.name}" class="game-img" loading="lazy" onerror="this.src='https://placehold.co/300x400/1c1430/a78bfa?text=${game.name}'">
-            <div class="game-overlay">
-              <div class="game-title">${game.name}</div>
-              <div class="game-genre">${genreLabels[game.genre]}</div>
-            </div>
-          `;
-          gamesGrid.appendChild(card);
-        });
+  function renderGames() {
+    gamesGrid.innerHTML = '';
 
-        loadMoreBtn.style.display = filtered.length <= displayLimit ? 'none' : 'inline-block';
-      }
+    const filtered = currentFilter === 'all' 
+      ? gamesDB 
+      : gamesDB.filter(g => g.genre === currentFilter);
+
+    const toDisplay = filtered.slice(0, displayLimit);
+
+    const genreLabels = {
+      'esports': 'КИБЕРСПОРТ',
+      'shooter': 'ШУТЕРЫ',
+      'rpg': 'RPG / ACTION',
+      'coop': 'CO-OP'
+    };
+
+    toDisplay.forEach(game => {
+      const card = document.createElement('div');
+      card.className = 'game-card';
+      const imgPath = game.img.startsWith('http') ? game.img : './' + game.img;
+
+      card.innerHTML = `
+        <img src="${imgPath}" alt="${game.name}" class="game-img" loading="eager" decoding="async">
+        <div class="game-overlay">
+          <div class="game-title">${game.name}</div>
+          <div class="game-genre">${genreLabels[game.genre] || game.genre}</div>
+        </div>
+      `;
+      gamesGrid.appendChild(card);
+    });
+
+    loadMoreBtn.style.display = filtered.length <= displayLimit ? 'none' : 'inline-block';
+  }
+
+  // ========== ФИЛЬТРЫ ==========
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.getAttribute('data-filter');
+      displayLimit = 12;
+      renderGames();
+    });
+  });
+
+  loadMoreBtn.addEventListener('click', () => {
+    displayLimit += 12;
+    renderGames();
+  });
+
+  // ========== ГЛАВНОЕ ИСПРАВЛЕНИЕ: ПРИНУДИТЕЛЬНЫЙ ПОКАЗ ==========
+  function forceShowGamesSection() {
+    const section = document.getElementById('games');
+    if (!section) return;
+
+    // Убираем reveal-анимацию полностью
+    const reveals = section.querySelectorAll('.reveal');
+    reveals.forEach(el => {
+      el.classList.remove('reveal');
+      el.classList.add('active');
+      el.style.cssText = 'opacity: 1 !important; transform: translateY(0) !important; transition: none !important;';
+    });
+
+    // Дополнительно форсируем саму сетку
+    gamesGrid.style.cssText = 'opacity: 1 !important; transform: none !important;';
+  }
+
+  // ========== ЗАПУСК ==========
+  function initGames() {
+    renderGames();
+    forceShowGamesSection();
+  }
+
+  // Первый запуск
+  initGames();
+
+  // После полной загрузки
+  window.addEventListener('load', initGames);
+
+  // Важно: при смене размера окна (F12 mobile toggle)
+  window.addEventListener('resize', () => {
+    if (window.innerWidth <= 768) {
+      forceShowGamesSection();
+    }
+  });
+
+  // Кнопка отладки (только на мобильных)
+  if (window.innerWidth <= 768) {
+    const btn = document.createElement('button');
+    btn.textContent = '🔄 ПЕРЕЗАГРУЗИТЬ ИГРЫ';
+    btn.style.cssText = 'position:fixed;bottom:70px;left:15px;z-index:99999;background:#c084fc;color:#000;padding:10px 18px;border-radius:50px;font-size:13px;box-shadow:0 4px 20px rgba(192,132,252,.6);';
+    btn.onclick = initGames;
+    document.body.appendChild(btn);
+  }
 
       filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
