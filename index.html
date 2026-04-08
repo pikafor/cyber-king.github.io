@@ -1662,12 +1662,42 @@
       }
     }
     @media (max-width: 768px) {
-  #games .reveal,
-  #games .games-grid {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
-  }
-}
+      #games .reveal,
+      #games .games-grid {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+      }
+    }
+    /* Контейнер для двух спец-акций */
+    .promo-special-blocks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    /* Модификаторы для цветных рамок */
+    .offer-box-accent {
+      border-color: var(--color-accent-secondary) !important;
+      justify-content: space-between;
+    }
+
+    .offer-box-warm {
+      border-color: var(--color-accent-warm) !important;
+      justify-content: space-between;
+    }
+
+    .offer-title-large {
+      font-size: 1.3rem;
+    }
+
+    /* НА МОБИЛЬНЫХ — ВЕРТИКАЛЬНО */
+    @media (max-width: 640px) {
+      .promo-special-blocks {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1820,7 +1850,7 @@
           </div>
         </div>
       </div>
-      <p style="text-align: center; margin-top: 2rem; font-family: var(--font-mono); color: var(--color-accent-tertiary);">Выбирайте свой уровень комфорта и погружайтесь в игровой мир с CYBER KING!</p>
+      <p style="text-align: center; margin-top: 2rem; font-family: var(--font-mono); color: var(--color-accent-tertiary);">Выбирайте свой уровень комфорта и погружайтесь в игровой мир с CYBER KING! 🎮</p>
     </div>
     <div class="section-border"></div>
   </section>
@@ -1926,17 +1956,17 @@
         </div>
       </div>
 
-      <div class="reveal" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 3rem;">
-        <div class="offer-box" style="border-color: var(--color-accent-secondary); justify-content: space-between;">
+      <div class="reveal promo-special-blocks">
+        <div class="offer-box offer-box-accent">
           <div>
-            <div class="offer-title" style="font-size: 1.3rem;"> 5 ПАКЕТОВ «5 ЧАСОВ»</div>
+            <div class="offer-title offer-title-large">5 ПАКЕТОВ «5 ЧАСОВ»</div>
             <div class="offer-time">Купи 5 пакетов — 6-й бесплатно!</div>
           </div>
           <div class="offer-price">АКЦИЯ</div>
         </div>
-        <div class="offer-box" style="border-color: var(--color-accent-warm); justify-content: space-between;">
+        <div class="offer-box offer-box-warm">
           <div>
-            <div class="offer-title" style="font-size: 1.3rem;"> ЛОТОТРОН</div>
+            <div class="offer-title offer-title-large">ЛОТОТРОН</div>
             <div class="offer-time">Пополни баланс от 500 ₽ — выиграй до 5000 ₽</div>
           </div>
           <div class="offer-price">ДЖЕКПОТ</div>
